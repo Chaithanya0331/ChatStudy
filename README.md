@@ -1,4 +1,4 @@
-# Ex. No:1b 			Study of Client Server Chat Applications
+[# Ex. No:1b 			Study of Client Server Chat Applications
 
 ## Aim: 
 To perform a study on Client Server Chat Applications
@@ -35,7 +35,7 @@ Client-server chat applications are software systems that enable real-time commu
 •	For security and privacy, chat applications often implement user authentication mechanisms.
 •	Users are required to provide credentials (e.g., username and password) to access the chat system.
 •	More advanced methods like tokens or secure protocols can enhance authentication.
-## 5. Message Routing:
+5. Message Routing:
 •	The server is responsible for routing messages from one client to another.
 •	It ensures that messages are delivered to the intended recipients.
 •	Message routing may involve maintaining a list of connected users and their associated sockets.
@@ -74,64 +74,72 @@ Client-server chat applications are versatile tools that facilitate real-time co
 Client-server chat applications are foundational to real-time communication over networks. They incorporate principles of socket programming, communication protocols, and security mechanisms to provide a seamless user experience. Understanding the basics of client-server chat applications is essential for developers involved in networked application development, as they form the backbone of various collaborative communication systems. As technology evolves, chat applications continue to adapt, incorporating new features and technologies to enhance user interaction and connectivity.
 
 ## PROGRAM:
-### client:
-python
 
+CLIENT:
+```
 import socket
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def client_program():
+    host = "127.0.0.1"   #
+    port = 5000
 
-client.connect(("localhost", 9999))
+    client_socket = socket.socket()
+    client_socket.connect((host, port))
 
-done=False
+    message = input(" -> ")
 
-while not done:
-    client.send(input("Message ").encode('utf-8'))
-    msg = client.recv(1024).decode('utf-8')
+    while message.lower().strip() != 'bye':
+        client_socket.send(message.encode())
+        data = client_socket.recv(1024).decode()
+        print('Received from server: ' + data)
+        message = input(" -> ")
 
-    if msg == 'quit':
-        done=True
-    else:
-        print(msg)
+    client_socket.close()
 
+if __name__ == '__main__':
+    client_program()
+```
 
-
-client.close()
-
-
-### server
-python
+SERVER:
+```
 import socket
-from base64 import decode
-from operator import truediv
 
-server =socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('localhost', 9999))
-server.listen()
-client,addr=server.accept()
+def server_program():
+    host = "127.0.0.1"   # localhost (works better on Windows)
+    port = 5000
 
-done = False
+    server_socket = socket.socket()
+    server_socket.bind((host, port))
 
-while not done:
-    msg = client.recv(1024).decode('utf-8')
+    server_socket.listen(2)
+    conn, address = server_socket.accept()
+    print("Connection from: " + str(address))
+    while True:
+        data = conn.recv(1024).decode()
+        if not data:
+            break
+        print("From connected user: " + str(data))
+        data = input(' -> ')
+        conn.send(data.encode())
 
-    if msg == 'quit':
-        done = True
-    else:
-        print(msg)
+    conn.close()
 
-    client.send(input("Message ").encode('utf-8'))
-
-
-client.close()
-server.close()
-
+if __name__ == '__main__':
+    server_program()
+```
 
 ## OUTPUT:
-![image](https://github.com/user-attachments/assets/3387a89a-890f-4322-900f-9aed4ceee866)
+
+<img width="806" height="438" alt="image" src="https://github.com/user-attachments/assets/d2157acf-d2f0-44eb-b01a-10ed9f5fdd54" />
+
+<img width="1037" height="526" alt="image" src="https://github.com/user-attachments/assets/40dabeeb-31d1-48c8-8374-f96ab0e7d97f" />
+
+
 
 
 
 ## Result:
 
 Thus the study on Client Server Chat Applications has been performed
+
+](https://github.com/Chaithanya0331/SocketStudy/blob/main/README.md)
